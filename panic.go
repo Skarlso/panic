@@ -10,10 +10,13 @@ func SetPanicHandler(handler PanicHandler) {
 
 func HandleCrash() {
 	if r := recover(); r != nil {
+		reallyPanic := true
 		for _, handler := range PanicHandlers {
-			handler(r)
+			reallyPanic = handler(r)
 		}
-		panic(r)
+		if reallyPanic {
+			panic(r)
+		}
 	}
 }
 
